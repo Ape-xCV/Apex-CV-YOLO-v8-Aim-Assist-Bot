@@ -1,0 +1,25 @@
+# Ultralytics YOLO 🚀, AGPL-3.0 license
+# Example usage: python train.py --data data.yaml
+# parent
+# ├── ultralytics
+# └── datasets
+#     └── apex  ← you are here
+#         ├── train
+#         │   ├── images
+#         │   └── labels
+#         └── valid
+#             ├── images
+#             └── labels
+
+
+# Train/val/test sets as 1) dir: path/to/imgs, 2) file: path/to/imgs.txt, or 3) list: [path/to/imgs1, path/to/imgs2, ..]
+path: ../datasets/apex  # dataset root dir (the first '../' is ignored)
+train: train/images  # train images (relative to 'path')
+val: valid/images  # val images (relative to 'path')
+test:  # test images (optional)
+
+# Classes
+names:
+  0: ally
+  1: enemy
+  2: tag
