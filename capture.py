@@ -7,7 +7,7 @@ camera = None
 
 
 def capture_init(args):
-    global region, camera
+    global x, y, region, camera
     screen_width = win32api.GetSystemMetrics(0)
     screen_height = win32api.GetSystemMetrics(1)
     crop_height = int(screen_height * args.crop_size)
