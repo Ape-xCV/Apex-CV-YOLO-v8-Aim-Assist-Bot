@@ -140,21 +140,21 @@ def PID(args, error):
 
 
 def move_mouse(args):
-    global screen_center, destination, last, width, pre_error, integral
+    global pos, screen_center, destination, last, width, pre_error, integral
     global shift_pressed, right_lock, mouse2_pressed, mouse1_pressed
     if detecting:
-        # pos = np.array(win32api.GetCursorPos(), dtype=int)  # GetCursorPos is monitored by BattlEye
-        pos = np.array(mouse.Controller().position, dtype=int)
-        mouse_vector = (destination - pos) / scale
+        if destination[0] == -1:
+            if last[0] == -1:
+                pre_error = integral = np.array([0., 0.])
+                mouse_vector = np.array([0, 0])
+                return
+            else:
+                mouse_vector = np.array([0, 0])
+        else:
+            mouse_vector = (destination - pos) / scale
         norm = np.linalg.norm(mouse_vector)
+        if norm > width*3/2: return
         if args.pid:
-            if destination[0] == -1:
-                if last[0] == -1:
-                    pre_error = integral = np.array([0., 0.])
-                    mouse_vector = np.array([0, 0])
-                    return
-                else:
-                    mouse_vector = np.array([0, 0])
             move = PID(args, mouse_vector)
             if abs(move[0]) > width:
                 move[0] = width * (move[0]/abs(move[0]))
@@ -164,13 +164,15 @@ def move_mouse(args):
             if ( shift_pressed and (not right_lock and mouse2_pressed and not mouse1_pressed) and norm <= width/2
             and abs(move[0]) >= abs(last_mv[0])/2 ):
                 win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, int(move[0]), int(move[1] / 3))
-                win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0)
-                win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0)
+                # mouse.Controller().move(int(move[0]), int(move[1] / 3))
+                mouse.Controller().press(mouse.Button.left)
+                mouse.Controller().release(mouse.Button.left)
             elif ( ((shift_pressed and not mouse2_pressed) or (right_lock and mouse2_pressed and not mouse1_pressed)) and norm <= width
             and abs(move[0]) >= abs(last_mv[0])/2 ):
                 win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, int(move[0]), int(move[1] / 3))
-                win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0)
-                win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0)
+                # mouse.Controller().move(int(move[0]), int(move[1] / 3))
+                mouse.Controller().press(mouse.Button.left)
+                mouse.Controller().release(mouse.Button.left)
             else:
                 win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, int(move[0]), int(move[1] / 3))
             return
@@ -185,7 +187,7 @@ def move_mouse(args):
 
 # redirect the mouse closer to the nearest box center
 def mouse_redirection(boxes, args):
-    global screen_size, screen_center, destination, last, width
+    global pos, screen_size, screen_center, destination, last, width
     if boxes.shape[0] == 0:
         last = destination
         destination = np.array([-1, -1])

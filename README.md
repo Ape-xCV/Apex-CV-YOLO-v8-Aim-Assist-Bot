@@ -40,7 +40,7 @@ Requirements:
 
 | GPU          | imgsz         | apex_8s.pt | apex_8s.trt | Precision |
 | ------------ | ------------- | ---------- | ----------- | --------- |
-| RTX 2070_8G  | 640/<br>1080p | 51/33 FPS  | 72/50 FPS   | FP16/32   |
+| RTX 2070_8G  | 640/<br>1080p | 51/35 FPS  | 72/50 FPS   | FP16/32   |
 | RTX 3080_12G | 640/<br>1080p | 53 FPS     | 72 FPS      | FP32      |
 
 <details>
