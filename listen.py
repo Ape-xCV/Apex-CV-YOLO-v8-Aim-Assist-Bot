@@ -16,7 +16,7 @@ left_lock = False  # lock on target when the left mouse button is pressed  # 左
 right_lock = False  # lock when pressing the right mouse button (scoping)  # 右键锁, Right, 按鼠标右键(开镜)时锁
 backforce = 0
 screen_size = np.array([win32api.GetSystemMetrics(0), win32api.GetSystemMetrics(1)])
-screen_center = np.array(screen_size, dtype=int) // 2
+screen_center = screen_size / 2
 destination = screen_center
 last = destination
 width = 0
@@ -201,8 +201,8 @@ def mouse_redirection(args, boxes):
         last = destination
         destination = np.array([-1, -1])
         return
-    # pos = np.array(win32api.GetCursorPos(), dtype=int)  # GetCursorPos is monitored by BattlEye
-    pos = np.array(mouse.Controller().position, dtype=int)
+    # pos = np.array(win32api.GetCursorPos())  # GetCursorPos is monitored by BattlEye
+    pos = np.array(mouse.Controller().position)
 
     # get the center of the boxes
     boxes_center = (
@@ -214,7 +214,6 @@ def mouse_redirection(args, boxes):
     )
 
     # map the box from the image coordinate to the screen coordinate
-    screen_center = screen_size / 2
     start_point = screen_center - screen_size[1] * args.crop_size / 2
     start_point = list(map(int, start_point))
     boxes_center[:, 0] = boxes_center[:, 0] + start_point[0]
