@@ -166,7 +166,7 @@ def move_mouse(args):
                 # mouse.Controller().move(int(move[0]), int(move[1] / 3))
                 mouse.Controller().press(mouse.Button.left)
                 mouse.Controller().release(mouse.Button.left)
-            elif ( ((shift_pressed and not mouse2_pressed) or (right_lock and mouse2_pressed and not mouse1_pressed)) and norm <= width
+            elif ( ((shift_pressed and not mouse2_pressed) or (right_lock and mouse2_pressed and not mouse1_pressed)) and norm <= width*2/3
             and abs(move[0]) >= abs(last_mv[0])/2 ):
                 win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, int(move[0]), int(move[1] / 3))
                 # mouse.Controller().move(int(move[0]), int(move[1] / 3))
