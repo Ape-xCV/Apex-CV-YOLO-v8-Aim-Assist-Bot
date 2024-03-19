@@ -161,8 +161,7 @@ pip install -r requirements.txt
     - Hold to _aim and fire_ **automatically** non-automatic weapons such as: `Hemlok, Nemesis, Prowler, G7, 3xTake, 30-30, Mastiff, P2020, Wingman`. **Do not use with automatic weapons**.
 - LEFT_LOCK
     - Enabled when pressing `'1'` or `'2'`. Disabled when pressing `'G'`.
-    - OR
-    - Use CURSOR_LEFT to toggle _aim assist_ **while firing** automatic weapons.
+    - Use to toggle _aim assist_ **while firing** automatic weapons.
 - RIGHT_LOCK
     - **This is not recommended**, and you also need to change your ADS from **toggle** to **hold**.
     - Use CURSOR_RIGHT to toggle _aim and fire_ **while scoping**. You will have to quickly follow up with MOUSE1 when using automatic weapons, or else **your firing pattern will be a dead giveaway**.
