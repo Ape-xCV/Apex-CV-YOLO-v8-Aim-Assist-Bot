@@ -146,7 +146,6 @@ def move_mouse(args):
         if destination[0] == -1:
             if last[0] == -1:
                 pre_error = integral = np.array([0., 0.])
-                mouse_vector = np.array([0, 0])
                 return
             else:
                 mouse_vector = np.array([0, 0])
