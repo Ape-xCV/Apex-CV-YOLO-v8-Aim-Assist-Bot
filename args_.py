@@ -34,6 +34,8 @@ def arg_init(args):
     args.add_argument("--verbose", type=bool, default=False, help="predict verbose")
     args.add_argument("--draw_boxes", type=bool,
                     default=False, help="outline detected target, borderless window")
+    args.add_argument("--caps_lock", type=bool,
+                    default=False, help="use CAPS_LOCK as LEFT_LOCK")
     # args.add_argument("--mouse_speed", type=float,
     #                 default=3.50, help="mouse speed (mouse sensitivity in the game)")
 

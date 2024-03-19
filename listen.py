@@ -25,13 +25,29 @@ scale = win32print.GetDeviceCaps(hDC, win32con.LOGPIXELSX) / 96
 pre_error = integral = np.array([0., 0.])
 
 
+def listen_init(args):
+    global caps_lock
+    caps_lock = args.caps_lock
+
+
 def get_D_L():
-    global detecting, listening
+    global caps_lock, left_lock, detecting, listening
+    if caps_lock:
+        if win32api.GetKeyState(0x14):
+            if not left_lock:
+                detecting = False
+                left_lock = True
+                winsound.Beep(800, 100)
+        else:
+            if left_lock:
+                detecting = False
+                left_lock = False
+                winsound.Beep(400, 100)
     return detecting, listening
 
 
 def listen_k_press(key):
-    global detecting, listening, shift_pressed, left_lock, right_lock
+    global caps_lock, detecting, listening, shift_pressed, left_lock, right_lock
     if key == keyboard.Key.home:
         detecting = False
         listening = False
@@ -44,24 +60,25 @@ def listen_k_press(key):
         if not detecting:
             detecting = True
             print("Start detection: ", detecting)
-    if key == keyboard.Key.left:
-        detecting = False
-        left_lock = not left_lock
-        winsound.Beep(800 if left_lock else 400, 200)
+    # if key == keyboard.Key.left:
+    #     detecting = False
+    #     left_lock = not left_lock
+    #     winsound.Beep(800 if left_lock else 400, 200)
     if key == keyboard.Key.right:
         detecting = False
         right_lock = not right_lock
         winsound.Beep(900 if right_lock else 500, 200)
-    if key == keyboard.KeyCode.from_char('1') or key == keyboard.KeyCode.from_char('2'):
-        if not left_lock:
-            detecting = False
-            left_lock = True
-            winsound.Beep(800, 100)
-    if key == keyboard.KeyCode.from_char('g'):
-        if left_lock:
-            detecting = False
-            left_lock = False
-            winsound.Beep(400, 100)
+    if not caps_lock:
+        if key == keyboard.KeyCode.from_char('1') or key == keyboard.KeyCode.from_char('2'):
+            if not left_lock:
+                detecting = False
+                left_lock = True
+                winsound.Beep(800, 100)
+        if key == keyboard.KeyCode.from_char('g'):
+            if left_lock:
+                detecting = False
+                left_lock = False
+                winsound.Beep(400, 100)
 
 
 def listen_k_release(key):
@@ -130,7 +147,7 @@ def listen_m_click(x, y, button, pressed):
 
 
 def PID(args, error):
-    global integral, pre_error, mouse2_pressed, backforce
+    global integral, pre_error, backforce
     integral += error
     derivative = error - pre_error
     pre_error = error
@@ -155,25 +172,18 @@ def move_mouse(args):
         if norm > width*3/2: return
         if args.pid:
             move = PID(args, mouse_vector)
-            if abs(move[0]) > width:
-                move[0] = width * (move[0]/abs(move[0]))
+            win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, int(move[0]), int(move[1] / 3))
             last_mv = last - destination + mouse_vector
             # norm <= width/2  # higher divisor increases precision but limits fire rate
             # abs(move[0]) >= abs(last_mv[0])/2  # lower divisor increases precision but limits fire rate
             if ( shift_pressed and (not right_lock and mouse2_pressed and not mouse1_pressed) and norm <= width/2
             and abs(move[0]) >= abs(last_mv[0])/2 ):
-                win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, int(move[0]), int(move[1] / 3))
-                # mouse.Controller().move(int(move[0]), int(move[1] / 3))
                 mouse.Controller().press(mouse.Button.left)
                 mouse.Controller().release(mouse.Button.left)
             elif ( ((shift_pressed and not mouse2_pressed) or (right_lock and mouse2_pressed and not mouse1_pressed)) and norm <= width*2/3
             and abs(move[0]) >= abs(last_mv[0])/2 ):
-                win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, int(move[0]), int(move[1] / 3))
-                # mouse.Controller().move(int(move[0]), int(move[1] / 3))
                 mouse.Controller().press(mouse.Button.left)
                 mouse.Controller().release(mouse.Button.left)
-            else:
-                win32api.mouse_event(win32con.MOUSEEVENTF_MOVE, int(move[0]), int(move[1] / 3))
             return
         # if destination not in region
         if norm <= 2 or (destination[0] == screen_center[0] and destination[1] == screen_center[1]): return
@@ -185,7 +195,7 @@ def move_mouse(args):
 
 
 # redirect the mouse closer to the nearest box center
-def mouse_redirection(boxes, args):
+def mouse_redirection(args, boxes):
     global pos, screen_size, screen_center, destination, last, width
     if boxes.shape[0] == 0:
         last = destination

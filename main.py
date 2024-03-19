@@ -1,5 +1,5 @@
 from pynput import keyboard, mouse
-from listen import listen_k_press, listen_k_release, listen_m_click, get_D_L, mouse_redirection, move_mouse
+from listen import listen_k_press, listen_k_release, listen_m_click, listen_init, get_D_L, mouse_redirection, move_mouse
 import argparse
 from args_ import *
 from threading import Thread
@@ -35,6 +35,7 @@ if __name__ == "__main__":
 
     args = argparse.ArgumentParser()
     args = arg_init(args)
+    listen_init(args)
 
     process1 = Thread(
         target=listeners,
@@ -84,7 +85,7 @@ if __name__ == "__main__":
 ##            elif args.save_img and listen.shift_pressed:
 ##                cv2.imwrite('screenshots/' + datetime.now().strftime('%Y-%m-%d_%H-%M-%S-%f') + '.png', img)
             # print(boxes)
-            mouse_redirection(boxes, args)
+            mouse_redirection(args, boxes)
             move_mouse(args)
         # print("post-process time: ", time.time() - time_predict)
         # print("total time: ", time.time() - time_shot)
