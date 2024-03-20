@@ -37,11 +37,12 @@ if __name__ == "__main__":
     args = arg_init(args)
     listen_init(args)
 
-    process1 = Thread(
+    thread_1 = Thread(
         target=listeners,
         args=(),
     )
-    process1.start()
+    thread_1.start()
+    print(thread_1)
 
     capture_init(args)
     if args.model[-3:] == ".pt":
