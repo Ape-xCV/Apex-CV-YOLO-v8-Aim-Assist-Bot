@@ -3,7 +3,6 @@ from listen import listen_k_press, listen_k_release, listen_m_click, listen_init
 import argparse
 from args_ import *
 from threading import Thread
-from multiprocessing import Process, Pipe, Value
 from capture import *
 import time
 import numpy as np
@@ -17,13 +16,13 @@ global detecting, listening
 
 
 def listeners():
-    key_listener = keyboard.Listener(on_press=listen_k_press, on_release=listen_k_release)
-    key_listener.start()
+    keyboard_listener = keyboard.Listener(on_press=listen_k_press, on_release=listen_k_release)
+    keyboard_listener.start()
 
     mouse_listener = mouse.Listener(on_click=listen_m_click)
     mouse_listener.start()
 
-    key_listener.join()
+    keyboard_listener.join()
 
 
 if __name__ == "__main__":
@@ -31,16 +30,13 @@ if __name__ == "__main__":
     print("\033[01;04;31m" + "A" + "\033[32m" + "N" + "\033[33m" + "S" + "\033[34m" + "I" + "\033[00m" + " enabled")
     # create an arg set
     listening = True
-    print("listener start")
+    print("listeners start")
 
     args = argparse.ArgumentParser()
     args = arg_init(args)
     listen_init(args)
 
-    thread_1 = Thread(
-        target=listeners,
-        args=(),
-    )
+    thread_1 = Thread(target=listeners)
     thread_1.start()
     print(thread_1)
 
