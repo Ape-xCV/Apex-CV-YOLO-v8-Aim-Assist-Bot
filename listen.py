@@ -181,7 +181,7 @@ def move_mouse(args):
                 mouse.Controller().press(mouse.Button.left)
                 mouse.Controller().release(mouse.Button.left)
             elif ( ((shift_pressed and not mouse2_pressed) or (right_lock and mouse2_pressed and not mouse1_pressed)) and norm <= width*2/3
-            and abs(move[0]) >= abs(last_mv[0])/2 ):
+            and abs(move[0]) >= abs(last_mv[0])*3/4 ):
                 mouse.Controller().press(mouse.Button.left)
                 mouse.Controller().release(mouse.Button.left)
             return
