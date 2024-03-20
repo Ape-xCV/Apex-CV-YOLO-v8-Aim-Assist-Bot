@@ -51,7 +51,7 @@ def listen_k_press(key):
     if key == keyboard.Key.home:
         detecting = False
         listening = False
-        print("listener stop")
+        print("listeners stop")
         winsound.Beep(700, 100)
         winsound.Beep(600, 100)
         return False
