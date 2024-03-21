@@ -176,7 +176,7 @@ def move_mouse(args):
             last_mv = last - destination + mouse_vector
             # norm <= width/2  # higher divisor increases precision but limits fire rate
             # abs(move[0]) >= abs(last_mv[0])/2 and move[0]*last_mv[0] >= 0  # ensures tracking
-            if ( shift_pressed and (not right_lock and mouse2_pressed and not mouse1_pressed)  # scope fire
+            if ( shift_pressed and not right_lock and mouse2_pressed and not mouse1_pressed  # scope fire
             and norm <= width*2/3 and abs(move[0]) >= abs(last_mv[0])/2 and move[0]*last_mv[0] >= 0 ):
                 mouse.Controller().press(mouse.Button.left)
                 mouse.Controller().release(mouse.Button.left)
