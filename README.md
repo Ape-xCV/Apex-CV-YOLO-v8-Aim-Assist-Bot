@@ -179,7 +179,28 @@ pip install -r requirements.txt
     - ❌ No SHIFT with automatic weapons.
     - ❌ No RIGHT_LOCK.
 
-### 3.1 TensorRT
+### 3.1 TensorRT (.engine)
+
+- To export `best_8s.pt` to `best_8s.engine`:
+    - Press **_[Win+R]_** and enter **cmd** to open a _Command Prompt_. Then input:
+    ```shell
+    set CUDA_MODULE_LOADING=LAZY
+    cd /D C:\TEMP\Ape-xCV\MODEL
+    yolo export model=best_8s.pt format=engine opset=12 workspace=7
+    ```
+- Install Notepad++ from: [`Notepad++ website`](https://notepad-plus-plus.org/downloads/).
+- Open `C:\TEMP\Ape-xCV\args_.py` with Notepad++.
+```shell
+def arg_init(args):
+    ...
+    args.add_argument("--model", type=str,
+                    default="/best_8s.pt", help="model path")
+```
+- Do not change the identation! In --model change `best_8s.pt` to `best_8s.engine`
+- Save `args_.py`.
+    - 🐵 Run `Ape-xCV.bat`.
+
+### 3.2 TensorRT (.trt)
 
 - If `C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\bin\zlibwapi.dll` is missing.
     - Copy `C:\Program Files\NVIDIA Corporation\Nsight Systems 2022.4.2\host-windows-x64\zlib.dll` to **C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8\bin** and then rename it to **zlibwapi.dll**
@@ -200,7 +221,6 @@ pip install -r requirements.txt
     ```shell
     C:\TEMP\TensorRT-8.5.3.1\bin\trtexec.exe --onnx=best_8s.onnx --saveEngine=best_8s.trt --buildOnly --workspace=7168
     ```
-- Install Notepad++ from: [`Notepad++ website`](https://notepad-plus-plus.org/downloads/).
 - Open `C:\TEMP\Ape-xCV\args_.py` with Notepad++.
 ```shell
 def arg_init(args):
@@ -208,11 +228,11 @@ def arg_init(args):
     args.add_argument("--model", type=str,
                     default="/best_8s.pt", help="model path")
 ```
-- Do not change the identation! In --model change `best_8s.pt` to `best_8s.trt`
+- In --model change `best_8s.pt` to `best_8s.trt`
 - Save `args_.py`.
     - 🐵 Run `Ape-xCV.bat`.
 
-### 3.2 TensorRT with GPU NMS
+### 3.3 TensorRT with GPU NMS (.trt)
 
 - Cons:
     - ❌ No speed increase.
@@ -241,11 +261,11 @@ def arg_init(args):
 def arg_init(args):
     ...
     args.add_argument("--model", type=str,
-                    default="/best_8s.trt", help="model path")
+                    default="/best_8s.pt", help="model path")
     args.add_argument("--end2end", type=bool,
                     default=False, help="use TensorRT efficientNMSPlugin")
 ```
-- In --model change `best_8s.trt` to `best_8s_e2e.trt`
+- In --model change `best_8s.pt` to `best_8s_e2e.trt`
 - In --end2end change `False` to `True`
 - Save `args_.py`.
     - 🐵 Run `Ape-xCV.bat`.

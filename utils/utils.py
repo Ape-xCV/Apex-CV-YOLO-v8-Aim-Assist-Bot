@@ -1,4 +1,5 @@
 import tensorrt as trt
+import json
 import pycuda.autoinit
 import pycuda.driver as cuda
 import numpy as np
@@ -22,8 +23,12 @@ class BaseEngine(object):
         runtime = trt.Runtime(logger)
         trt.init_libnvinfer_plugins(logger,'')  # initialize TensorRT plugins
         with open(engine_path, 'rb') as f:
-            serialized_engine = f.read()
-        engine = runtime.deserialize_cuda_engine(serialized_engine)
+            if engine_path[-7:] == '.engine':
+                meta_len = int.from_bytes(f.read(4), byteorder='little')  # read metadata length
+                metadata = json.loads(f.read(meta_len).decode('utf-8'))  # read metadata
+            engine = runtime.deserialize_cuda_engine(f.read())  # read engine
+            # serialized_engine = f.read()
+        # engine = runtime.deserialize_cuda_engine(serialized_engine)
         self.imgsz = engine.get_binding_shape(0)[2:]  # get imgsz
         self.n_classes = engine.get_binding_shape(1)[1] - 4  # get n_classes from "(x1 y1 x2 y2) c1 c2 c3 cn"
         self.context = engine.create_execution_context()
