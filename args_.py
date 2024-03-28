@@ -42,7 +42,7 @@ def arg_init(args):
     # PID args
     args.add_argument("--pid", type=bool, default=True, help="use proportional–integral–derivative control")
     args.add_argument("--Kp", type=float, default=0.3, help="Kp")  # proporcional to distance 0.4 nimble 0.1 slack
-    args.add_argument("--Ki", type=float, default=0.04, help="Ki")  # integral accumulator 0.04 explosive 0.01 composed
+    args.add_argument("--Ki", type=float, default=0.03, help="Ki")  # integral accumulator 0.04 explosive 0.01 composed
     args.add_argument("--Kd", type=float, default=0.3, help="Kd")  # derivative absorber 0.4 stiff 0.1 soft
 
     args = args.parse_args(args=[])
