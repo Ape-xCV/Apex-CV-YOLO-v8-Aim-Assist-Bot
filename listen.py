@@ -181,7 +181,7 @@ def move_mouse(args):
                 mouse.Controller().press(mouse.Button.left)
                 mouse.Controller().release(mouse.Button.left)
             elif ( ((shift_pressed and not mouse2_pressed) or (right_lock and mouse2_pressed and not mouse1_pressed))  # hip fire
-            and norm <= width*2/3 and abs(move[0]) >= abs(last_mv[0])/2 and move[0]*last_mv[0] >= 0 ):
+            and norm <= width*3/4 and abs(move[0]) >= abs(last_mv[0])/2 and move[0]*last_mv[0] >= 0 ):
                 mouse.Controller().press(mouse.Button.left)
                 mouse.Controller().release(mouse.Button.left)
             return
